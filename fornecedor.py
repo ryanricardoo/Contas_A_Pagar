@@ -9,6 +9,7 @@ class Fornecedor:
         self.telefone = telefone
         self.contato = contato
     def menu():
+        try:
             os.system('cls')
             print("1 Registrar Título")
             print("2 Exibir fornecedores")
@@ -30,6 +31,9 @@ class Fornecedor:
                     Fornecedor.Search()
                 case 6:
                     pass
+        except Exception as error:
+            print("Opção inválida")
+            input("Pressione qualquer tecla para continuar")
     def Add():
         nome = input("Informe o nome do fornecedor: ")
         endereco = input("Informe o endereço do fornecedor: ")
