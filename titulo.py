@@ -20,13 +20,12 @@ class MetodoPgto(Enum):
 
 class Titulo:
     db = "titulos.json"
-    def __init__(self,valor:float,fornecedor:Fornecedor,desc:str,numero:int,status:str,vencimento:date):
+    def __init__(self,valor:float,fornecedor:Fornecedor,desc:str,status:str,vencimento:date):
         self.dt_emissao = date.now()
         self.vencimento = date
         self.pagamento = date
         self.valor = valor
         self.desc = desc
-        self.numero = numero
         self.status = status
         self.fornecedor = fornecedor
         self.metogoPgto = str
@@ -47,25 +46,46 @@ class Titulo:
         valor = float(input("Informe o valor do título: R$"))
         fornecedor = input("Informe o nome completo do fornecedor: ")
         desc = input("Informe a descrição do título: ")
-        numero = input("Informe o número do título: ")
         status = StatusPgto.pendente.value
-        vencimento = datetime.strptime(input("Informe a data de vencimento do título: "),'%d/%m/%Y')
+        vencimento = datetime.strptime(input("Informe a data de vencimento do título no formato dia/mês/ano: "),'%d/%m/%Y')
         db = TinyDB(Titulo.db)
-        db.insert({'valor':valor,'fornecedor':fornecedor,'desc':desc,'numero':numero,'vencimento':str(vencimento.date())})
+        db.insert({'valor':valor,'fornecedor':fornecedor,'desc':desc,'status':status,'vencimento':f'{vencimento.day}/{vencimento.month}/{vencimento.year}'})
         print("Título registrado")
         input("Pressione qualquer tecla para continuar")
     def Show():
-        titulos = Query()
         db = TinyDB(Titulo.db)
-        resultado = db.all()
-        for titulo in resultado:
-            print(f"Id: {titulo.doc_id}")
-            print(f"Valor: R${titulo['valor']}")
-            print(f"Fornecedor: {titulo['fornecedor']}")
-            print(f"Descrição: {titulo['desc']}")
-            print(f"Número: {titulo['numero']}")
-            print(f"Vencimento: {titulo['vencimento']}")
-            print('-------------------------------------------------')
+        titulos = Query()
+        os.system('cls')
+        print("1 Mostrar todos")
+        print("2 Pendentes")
+        print("3 Pagos")
+        print("4 Atrasados")
+        print("5 Cancelados")
+        print("9 Retornar")
+        opcao = int(input("Informe a opcao desejada: "))
+        match opcao:
+            case 1:
+                resultado = db.all()
+            case 2:
+                resultado = db.search(titulos.status == StatusPgto.pendente.value)
+            case 3:
+                resultado = db.search(titulos.status == StatusPgto.pago.value)
+            case 4:
+                resultado = db.search(titulos.status == StatusPgto.atrasado.value)
+            case 5:
+                resultado = db.search(titulos.status == StatusPgto.cancelado.value)
+            case 9:
+                pass
+        if(resultado.__len__()>0):
+            for titulo in resultado:
+                print(f"Valor: R${titulo['valor']}")
+                print(f"Fornecedor: {titulo['fornecedor']}")
+                print(f"Descrição: {titulo['desc']}")
+                print(f"Número: {titulo.doc_id}")
+                print(f"Vencimento: {titulo['vencimento']}")
+                print('-------------------------------------------------')
+        else:
+            print("Nenhum título encontrado")
         input("Pressione qualquer tecla para continuar")
 def registrar_pgto(self, dt_pagamento):
     self.pagamento = dt_pagamento

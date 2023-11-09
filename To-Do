@@ -1,0 +1,7 @@
+Completar os métodos do titulo
+Tratamento de erro de todos os métodos
+Criar método de realizar pagemento
+Criar método de verificar validade do título para determinar como atrasado
+Adicionar número de transação no titulo para pagemento em banco
+Adicionar campo de comentario no pagamento do titulo
+Criar método de cancelamento de título
