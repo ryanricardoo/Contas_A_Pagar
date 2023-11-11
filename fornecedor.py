@@ -35,6 +35,7 @@ class Fornecedor:
             print("Opção inválida")
             input("Pressione qualquer tecla para continuar")
     def Add():
+        try:
         nome = input("Informe o nome do fornecedor: ")
         endereco = input("Informe o endereço do fornecedor: ")
         telefone = input("Informe o telefone do fornecedor: ")
@@ -44,6 +45,7 @@ class Fornecedor:
         print("Fornecedor registrado")
         input("Pressione qualquer tecla para continuar")
 
+        except Exception as error:
     def Show():
         db = TinyDB(Fornecedor.db)
         resultado = db.all()
