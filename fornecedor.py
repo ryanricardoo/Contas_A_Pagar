@@ -44,9 +44,12 @@ class Fornecedor:
         db.insert({'nome':nome,'endereco':endereco,'telefone':telefone,'contato':contato})
         print("Fornecedor registrado")
         input("Pressione qualquer tecla para continuar")
-
         except Exception as error:
+            print("Opção inválida")
+            input("Pressione qualquer tecla para continuar")
+
     def Show():
+        try:
         db = TinyDB(Fornecedor.db)
         resultado = db.all()
         for fornecedor in resultado:
@@ -57,8 +60,11 @@ class Fornecedor:
             print(f"Contato: {fornecedor['contato']}")
             print('-------------------------------------------------')
         input("Pressione qualquer tecla para continuar")
-
+        except Exception as error:
+            print("Opção inválida")
+            input("Pressione qualquer tecla para continuar")
     def Remove():
+        try:
         id = int(input("Informe o id do fornecedor: "))
         db = TinyDB(Fornecedor.db)
         nome = db.get(doc_id=id)['nome']
@@ -68,8 +74,11 @@ class Fornecedor:
         else:
             print(f"Fornecedor não encontrado")
         input("Pressione qualquer tecla para continuar")
-        
+        except Exception as error:
+            print("Opção inválida")
+            input("Pressione qualquer tecla para continuar")
     def Update():
+        try:
         id = int(input("Informe o id do fornecedor: "))
         db = TinyDB(Fornecedor.db)
         fornecedor = db.get(doc_id=id)
@@ -83,8 +92,11 @@ class Fornecedor:
         else:
             print("Fornecedor não encontrado")
         input("Pressione qualquer tecla para continuar")
-        
+        except Exception as error:
+        print("Opção inválida")
+        input("Pressione qualquer tecla para continuar")
     def Search():
+        try:
         nome = input("Informe o nome do fornecedor: ")
         db = TinyDB(Fornecedor.db)
         fornecedores = Query()
@@ -99,4 +111,7 @@ class Fornecedor:
             print('-------------------------------------------------')
         else:
             print("Fornecedor não encontrado")
+        input("Pressione qualquer tecla para continuar")
+        except Exception as error
+        print("Fornecedor não encontrado")
         input("Pressione qualquer tecla para continuar")
