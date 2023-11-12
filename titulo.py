@@ -33,6 +33,7 @@ class Titulo:
         os.system('cls')
         print("1 Registrar título")
         print("2 Exibir títulos")
+        print("3 Realizar pagamento")
         print("9 Retornar")
         opcao = int(input("Informe a opcao desejada: "))
         match opcao:
@@ -40,14 +41,16 @@ class Titulo:
                 Titulo.Add()
             case 2:
                 Titulo.Show()
+            case 3:
+                Titulo.DoPayment()
             case 9:
                 pass
     def Add():
         valor = float(input("Informe o valor do título: R$"))
         fornecedor = input("Informe o nome completo do fornecedor: ")
         desc = input("Informe a descrição do título: ")
-        status = StatusPgto.pendente.value
         vencimento = datetime.strptime(input("Informe a data de vencimento do título no formato dia/mês/ano: "),'%d/%m/%Y')
+        status = Verify_Status(vencimento)
         db = TinyDB(Titulo.db)
         db.insert({'valor':valor,'fornecedor':fornecedor,'desc':desc,'status':status,'vencimento':f'{vencimento.day}/{vencimento.month}/{vencimento.year}'})
         print("Título registrado")
@@ -87,6 +90,16 @@ class Titulo:
         else:
             print("Nenhum título encontrado")
         input("Pressione qualquer tecla para continuar")
+
+
+def Verify_Status(vencimento):
+    hoje = datetime.now()
+    if hoje <= vencimento:
+        return StatusPgto.pendente.value
+    else:
+        return StatusPgto.atrasado.value
+
+
 def registrar_pgto(self, dt_pagamento):
     self.pagamento = dt_pagamento
     self.status = StatusPgto.pago.value
