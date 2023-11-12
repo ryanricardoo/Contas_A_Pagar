@@ -3,10 +3,13 @@ from fornecedor import Fornecedor
 from titulo import Titulo
 
 def menu():
+    try:
     os.system('cls')
     print("1 Fornecedores")
     print("2 Títulos")
     print("9 Sair")
+    except Exception as error:
+    print("Opção Inválida")
 
 
 # Press the green button in the gutter to run the script.
