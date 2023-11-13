@@ -36,82 +36,83 @@ class Fornecedor:
             input("Pressione qualquer tecla para continuar")
     def Add():
         try:
-        nome = input("Informe o nome do fornecedor: ")
-        endereco = input("Informe o endereço do fornecedor: ")
-        telefone = input("Informe o telefone do fornecedor: ")
-        contato = input("Informe o contato do fornecedor: ")
-        db = TinyDB(Fornecedor.db)
-        db.insert({'nome':nome,'endereco':endereco,'telefone':telefone,'contato':contato})
-        print("Fornecedor registrado")
-        input("Pressione qualquer tecla para continuar")
-        except Exception as error:
-            print("Opção inválida")
-            input("Pressione qualquer tecla para continuar")
-
-    def Show():
-        try:
-        db = TinyDB(Fornecedor.db)
-        resultado = db.all()
-        for fornecedor in resultado:
-            print(f"Id: {fornecedor.doc_id}")
-            print(f"Nome: {fornecedor['nome']}")
-            print(f"Endereço: {fornecedor['endereco']}")
-            print(f"Telefone: {fornecedor['telefone']}")
-            print(f"Contato: {fornecedor['contato']}")
-            print('-------------------------------------------------')
-        input("Pressione qualquer tecla para continuar")
-        except Exception as error:
-            print("Opção inválida")
-            input("Pressione qualquer tecla para continuar")
-    def Remove():
-        try:
-        id = int(input("Informe o id do fornecedor: "))
-        db = TinyDB(Fornecedor.db)
-        nome = db.get(doc_id=id)['nome']
-        result = db.remove(doc_ids=[id])
-        if(result.__len__() > 0):
-            print(f"Fornecedor {nome} removido")
-        else:
-            print(f"Fornecedor não encontrado")
-        input("Pressione qualquer tecla para continuar")
-        except Exception as error:
-            print("Opção inválida")
-            input("Pressione qualquer tecla para continuar")
-    def Update():
-        try:
-        id = int(input("Informe o id do fornecedor: "))
-        db = TinyDB(Fornecedor.db)
-        fornecedor = db.get(doc_id=id)
-        if(fornecedor is not None):
             nome = input("Informe o nome do fornecedor: ")
             endereco = input("Informe o endereço do fornecedor: ")
             telefone = input("Informe o telefone do fornecedor: ")
             contato = input("Informe o contato do fornecedor: ")
-            db.update({'nome':nome,'endereco':endereco,'telefone':telefone,'contato':contato},doc_ids=[id])
-            print("Dados do fornecedor atualizados")
-        else:
-            print("Fornecedor não encontrado")
-        input("Pressione qualquer tecla para continuar")
+            db = TinyDB(Fornecedor.db)
+            db.insert({'nome':nome,'endereco':endereco,'telefone':telefone,'contato':contato})
+            print("Fornecedor registrado")
+            input("Pressione qualquer tecla para continuar")
         except Exception as error:
-        print("Opção inválida")
+            print("Falha ao registrar fornecedor")
+            input("Pressione qualquer tecla para continuar")
+
+    def Show():
+        try:
+            db = TinyDB(Fornecedor.db)
+            resultado = db.all()
+            for fornecedor in resultado:
+                print(f"Id: {fornecedor.doc_id}")
+                print(f"Nome: {fornecedor['nome']}")
+                print(f"Endereço: {fornecedor['endereco']}")
+                print(f"Telefone: {fornecedor['telefone']}")
+                print(f"Contato: {fornecedor['contato']}")
+                print('-------------------------------------------------')
+            input("Pressione qualquer tecla para continuar")
+        except Exception as error:
+            print("Falha ao exibir fornecedores")
+            input("Pressione qualquer tecla para continuar")
+
+    def Remove():
+        try:
+            id = int(input("Informe o id do fornecedor: "))
+            db = TinyDB(Fornecedor.db)
+            nome = db.get(doc_id=id)['nome']
+            result = db.remove(doc_ids=[id])
+            if(result.__len__() > 0):
+                print(f"Fornecedor {nome} removido")
+            else:
+                print(f"Fornecedor não encontrado")
+            input("Pressione qualquer tecla para continuar")
+        except Exception as error:
+            print("Falha ao remover fornecedor")
+            input("Pressione qualquer tecla para continuar")
+    def Update():
+        try:
+            id = int(input("Informe o id do fornecedor: "))
+            db = TinyDB(Fornecedor.db)
+            fornecedor = db.get(doc_id=id)
+            if(fornecedor is not None):
+                nome = input("Informe o nome do fornecedor: ")
+                endereco = input("Informe o endereço do fornecedor: ")
+                telefone = input("Informe o telefone do fornecedor: ")
+                contato = input("Informe o contato do fornecedor: ")
+                db.update({'nome':nome,'endereco':endereco,'telefone':telefone,'contato':contato},doc_ids=[id])
+                print("Dados do fornecedor atualizados")
+            else:
+                print("Fornecedor não encontrado")
+            input("Pressione qualquer tecla para continuar")
+        except Exception as error:
+            print("Falha ao atualizar fornecedor")
         input("Pressione qualquer tecla para continuar")
     def Search():
         try:
-        nome = input("Informe o nome do fornecedor: ")
-        db = TinyDB(Fornecedor.db)
-        fornecedores = Query()
-        result = db.search(fornecedores.nome == nome)
-        if(result.__len__()>0):
-           for fornecedor in result:
-            print(f"Id: {fornecedor.doc_id}")
-            print(f"Nome: {fornecedor['nome']}")
-            print(f"Endereço: {fornecedor['endereco']}")
-            print(f"Telefone: {fornecedor['telefone']}")
-            print(f"Contato: {fornecedor['contato']}")
-            print('-------------------------------------------------')
-        else:
-            print("Fornecedor não encontrado")
-        input("Pressione qualquer tecla para continuar")
-        except Exception as error
-        print("Fornecedor não encontrado")
+            nome = input("Informe o nome do fornecedor: ")
+            db = TinyDB(Fornecedor.db)
+            fornecedores = Query()
+            result = db.search(fornecedores.nome == nome)
+            if(result.__len__()>0):
+                for fornecedor in result:
+                    print(f"Id: {fornecedor.doc_id}")
+                    print(f"Nome: {fornecedor['nome']}")
+                    print(f"Endereço: {fornecedor['endereco']}")
+                    print(f"Telefone: {fornecedor['telefone']}")
+                    print(f"Contato: {fornecedor['contato']}")
+                    print('-------------------------------------------------')
+            else:
+                print("Fornecedor não encontrado")
+            input("Pressione qualquer tecla para continuar")
+        except Exception as error:
+            print("Falha ao pesquisar fornecedores")
         input("Pressione qualquer tecla para continuar")
