@@ -71,60 +71,54 @@ class Titulo:
             print("Falha ao registrar título")
         input("Pressione qualquer tecla para continuar")
     def registrar_pgto():
-        db = TinyDB(Titulo.db)
-        titulos = Query()
-        mostrar = db.search((titulos.status == StatusPgto.pendente.value) | (titulos.status == StatusPgto.atrasado.value))
-        print("Qual titulo deseja realizar o pagamento? ")
-        for titulo in mostrar:
-            print(f"Número: {titulo.doc_id}")
-            print(f"Fornecedor: {titulo['fornecedor']}")
-            print(f"Valor: R${titulo['valor']}")
-            print(f"Descrição: {titulo['desc']}")
-            print(f"Vencimento: {titulo['vencimento']}")
-            print(f"Status: {titulo['status']}")
-            print('-------------------------------------------------')
-
-        while True:
-            try:
-                opcao = int(input("Escolha o titulo a ser pago pelo número: "))
-            except Exception as erro:
-                opcao = None
-                print(erro)
-                continue
+        try:
+            db = TinyDB(Titulo.db)
+            titulos = Query()
+            mostrar = db.search((titulos.status == StatusPgto.pendente.value) | (titulos.status == StatusPgto.atrasado.value))
+            print("Qual titulo deseja realizar o pagamento? ")
+            for titulo in mostrar:
+                print(f"Número: {titulo.doc_id}")
+                print(f"Fornecedor: {titulo['fornecedor']}")
+                print(f"Valor: R${titulo['valor']}")
+                print(f"Descrição: {titulo['desc']}")
+                print(f"Vencimento: {titulo['vencimento']}")
+                print(f"Status: {titulo['status']}")
+                print('-------------------------------------------------')
+            
+            opcao = int(input("Escolha o titulo a ser pago pelo número: "))
+            titulo = db.get(doc_id=opcao)
+            if titulo is not None:
+                db.update({'status': StatusPgto.pago.value}, doc_ids=[opcao])
+                print("Qual o método de pagamento? ")
+                print("1 Cheque")
+                print("2 Boleto")
+                print("3 Cartão de crédito")
+                print("4 Cartão de débito")
+                print("5 Dinheiro")
+                forma_pagamento = int(input("Escolha a forma de pagamento: "))
+                match forma_pagamento:
+                    case 1:
+                        meioPgto = MetodoPgto.cheque.value
+                        db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
+                    case 2:
+                        meioPgto = MetodoPgto.boleto.value
+                        db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
+                    case 3:
+                        meioPgto = MetodoPgto.cartao_credito.value
+                        db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
+                    case 4:
+                        meioPgto = MetodoPgto.cartao_debito.value
+                        db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
+                    case 5:
+                        meioPgto = MetodoPgto.dinheiro.value
+                        db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
+                print("Pagamento registrado")
+                print("-------------------------------------------------")
             else:
-                break
-        if opcao > 0 and opcao <= mostrar.__len__():
-            db.update({'status': StatusPgto.pago.value}, doc_ids=[opcao])
-            print("Qual o método de pagamento? ")
-            print("1 Cheque")
-            print("2 Boleto")
-            print("3 Cartão de crédito")
-            print("4 Cartão de débito")
-            print("5 Dinheiro")
-            forma_pagamento = int(input("Escolha a forma de pagamento: "))
-            match forma_pagamento:
-                case 1:
-                    meioPgto = MetodoPgto.cheque.value
-                    db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
-                case 2:
-                    meioPgto = MetodoPgto.boleto.value
-                    db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
-                case 3:
-                    meioPgto = MetodoPgto.cartao_credito.value
-                    db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
-                case 4:
-                    meioPgto = MetodoPgto.cartao_debito.value
-                    db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
-                case 5:
-                    meioPgto = MetodoPgto.dinheiro.value
-                    db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
-            print("Pagamento registrado")
-            input("Pressione qualquer tecla para continuar")
-            print("-------------------------------------------------")
-        else:
-            print("Documento selecionado inválido!")
-            input("Pressione qualquer tecla para continuar")
-
+                print("Documento selecionado inválido!")
+        except Exception as error:
+            print("Falha ao realizar pagamento")
+        input("Pressione qualquer tecla para continuar")
     def Show():
         try:
             db = TinyDB(Titulo.db)
