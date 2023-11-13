@@ -43,7 +43,7 @@ class Titulo:
             case 2:
                 Titulo.Show()
             case 3:
-                Titulo.DoPayment()
+                pass
             case 4:
                 Titulo.Cancel()
             case 9:
@@ -97,14 +97,13 @@ class Titulo:
 
     def Cancel():
         db = TinyDB(Titulo.db)
-        titulos = Query()
         id = int(input("Informe o número do titulo: "))
-        numero_titulo = db.get(doc_id=id)
-        if (numero_titulo is not None):
+        titulo = db.get(doc_id=id)
+        if (titulo is not None):
             db.update({'status':StatusPgto.cancelado.value},doc_ids=[id])
-            print("Titulo cancelado")
+            print("Título cancelado")
         else:
-            print("Título não encontrado!")
+            print("Título não encontrado")
         input("Pressione qualquer tecla para continuar")
 
 
