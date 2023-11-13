@@ -57,17 +57,19 @@ class Titulo:
    
 
     def Add():
-        valor = float(input("Informe o valor do título: R$ "))
-        fornecedor = input("Informe o nome completo do fornecedor: ")
-        desc = input("Informe a descrição do título: ")
-        forma_pagamento = MetodoPgto.pendente.value
-        vencimento = datetime.strptime(input("Informe a data de vencimento do título no formato dia/mês/ano: "),'%d/%m/%Y')
-        status = Verify_Status(vencimento)
-        db = TinyDB(Titulo.db)
-        db.insert({'valor':valor,'fornecedor':fornecedor,'desc':desc,'status':status,'vencimento':f'{vencimento.day}/{vencimento.month}/{vencimento.year}', 'meioPgto':forma_pagamento})
-        print("Título registrado")
+        try:
+            valor = float(input("Informe o valor do título: R$ "))
+            fornecedor = input("Informe o nome completo do fornecedor: ")
+            desc = input("Informe a descrição do título: ")
+            forma_pagamento = MetodoPgto.pendente.value
+            vencimento = datetime.strptime(input("Informe a data de vencimento do título no formato dia/mês/ano: "),'%d/%m/%Y')
+            status = Verify_Status(vencimento)
+            db = TinyDB(Titulo.db)
+            db.insert({'valor':valor,'fornecedor':fornecedor,'desc':desc,'status':status,'vencimento':f'{vencimento.day}/{vencimento.month}/{vencimento.year}', 'meioPgto':forma_pagamento})
+            print("Título registrado")
+        except Exception as error:
+            print("Falha ao registrar título")
         input("Pressione qualquer tecla para continuar")
-
     def registrar_pgto():
         db = TinyDB(Titulo.db)
         titulos = Query()
@@ -117,58 +119,66 @@ class Titulo:
                     meioPgto = MetodoPgto.dinheiro.value
                     db.update({'meioPgto': meioPgto}, doc_ids=[opcao])
             print("Pagamento registrado")
+            input("Pressione qualquer tecla para continuar")
             print("-------------------------------------------------")
         else:
             print("Documento selecionado inválido!")
             input("Pressione qualquer tecla para continuar")
 
     def Show():
-        db = TinyDB(Titulo.db)
-        titulos = Query()
-        os.system('cls')
-        print("1 Mostrar todos")
-        print("2 Pendentes")
-        print("3 Pagos")
-        print("4 Atrasados")
-        print("5 Cancelados")
-        print("9 Retornar")
-        opcao = int(input("Informe a opcao desejada: "))
-        match opcao:
-            case 1:
-                resultado = db.all()
-            case 2:
-                resultado = db.search(titulos.status == StatusPgto.pendente.value)
-            case 3:
-                resultado = db.search(titulos.status == StatusPgto.pago.value)
-            case 4:
-                resultado = db.search(titulos.status == StatusPgto.atrasado.value)
-            case 5:
-                resultado = db.search(titulos.status == StatusPgto.cancelado.value)
-            case 9:
-                pass
-        if(resultado.__len__()>0):
-            for titulo in resultado:
-                print(f"Valor: R${titulo['valor']}")
-                print(f"Fornecedor: {titulo['fornecedor']}")
-                print(f"Descrição: {titulo['desc']}")
-                print(f"Número: {titulo.doc_id}")
-                print(f"Vencimento: {titulo['vencimento']}")
-                print(f"Status: {titulo['status']}")
-                print(f"Método de pagamento: {titulo['meioPgto']}")
-                print('-------------------------------------------------')
-        else:
-            print("Nenhum título encontrado")
+        try:
+            db = TinyDB(Titulo.db)
+            titulos = Query()
+            os.system('cls')
+            print("1 Mostrar todos")
+            print("2 Pendentes")
+            print("3 Pagos")
+            print("4 Atrasados")
+            print("5 Cancelados")
+            print("9 Retornar")
+            opcao = int(input("Informe a opcao desejada: "))
+            match opcao:
+                case 1:
+                    resultado = db.all()
+                case 2:
+                    resultado = db.search(titulos.status == StatusPgto.pendente.value)
+                case 3:
+                    resultado = db.search(titulos.status == StatusPgto.pago.value)
+                case 4:
+                    resultado = db.search(titulos.status == StatusPgto.atrasado.value)
+                case 5:
+                    resultado = db.search(titulos.status == StatusPgto.cancelado.value)
+                case 9:
+                    pass
+            if(resultado.__len__()>0):
+                for titulo in resultado:
+                    print(f"Valor: R${titulo['valor']}")
+                    print(f"Fornecedor: {titulo['fornecedor']}")
+                    print(f"Descrição: {titulo['desc']}")
+                    print(f"Número: {titulo.doc_id}")
+                    print(f"Vencimento: {titulo['vencimento']}")
+                    print(f"Status: {titulo['status']}")
+                    print(f"Método de pagamento: {titulo['meioPgto']}")
+                    print('-------------------------------------------------')
+            else:
+                print("Nenhum título encontrado")
+        except Exception as error:
+            print("Falha ao exibir títulos")
         input("Pressione qualquer tecla para continuar")
 
+
     def Cancel():
-        db = TinyDB(Titulo.db)
-        id = int(input("Informe o número do titulo: "))
-        titulo = db.get(doc_id=id)
-        if (titulo is not None):
-            db.update({'status':StatusPgto.cancelado.value},doc_ids=[id])
-            print("Título cancelado")
-        else:
-            print("Título não encontrado")
+        try:
+            db = TinyDB(Titulo.db)
+            id = int(input("Informe o número do titulo: "))
+            titulo = db.get(doc_id=id)
+            if (titulo is not None):
+                db.update({'status':StatusPgto.cancelado.value},doc_ids=[id])
+                print("Título cancelado")
+            else:
+                print("Título não encontrado")
+        except Exception as error:
+            print("Falha ao Cancelar título")
         input("Pressione qualquer tecla para continuar")
 
 def Verify_Status(vencimento):
