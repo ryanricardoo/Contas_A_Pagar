@@ -11,7 +11,7 @@ class Fornecedor:
     def menu():
         try:
             os.system('cls')
-            print("1 Registrar Título")
+            print("1 Registrar Fornecedor")
             print("2 Exibir fornecedores")
             print("3 Remover fornecedor")
             print("4 Alterar fornecedor")
