@@ -53,6 +53,8 @@ class Titulo:
             case 9:
                 pass
 
+    
+   
 
     def Add():
         valor = float(input("Informe o valor do título: R$ "))
@@ -118,7 +120,7 @@ class Titulo:
             print("-------------------------------------------------")
         else:
             print("Documento selecionado inválido!")
-
+            input("Pressione qualquer tecla para continuar")
 
     def Show():
         db = TinyDB(Titulo.db)
@@ -169,4 +171,10 @@ class Titulo:
             print("Título não encontrado")
         input("Pressione qualquer tecla para continuar")
 
-
+def Verify_Status(vencimento):
+        hoje = datetime.now()
+        if hoje <= vencimento:
+            return StatusPgto.pendente.value
+        else:
+            return StatusPgto.atrasado.value
+ 
