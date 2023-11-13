@@ -102,17 +102,9 @@ class Titulo:
         numero_titulo = db.get(doc_id=id)
         if (numero_titulo is not None):
             db.update({'status':StatusPgto.cancelado.value},doc_ids=[id])
-            result = db.search(titulos.doc_id == id)
-            for fatura in result:
-                print(f"Valor: R${fatura['valor']}")
-                print(f"Fornecedor: {fatura['fornecedor']}")
-                print(f"Descrição: {fatura['desc']}")
-                print(f"Número: {fatura.doc_id}")
-                print(f"Vencimento: {fatura['vencimento']}")
-                print(f"Status: {fatura['status']}")
-                print('-------------------------------------------------')
+            print("Titulo cancelado")
         else:
-            print("Nenhum título encontrado")
+            print("Título não encontrado!")
         input("Pressione qualquer tecla para continuar")
 
 
