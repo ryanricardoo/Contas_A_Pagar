@@ -34,6 +34,7 @@ class Titulo:
         print("1 Registrar título")
         print("2 Exibir títulos")
         print("3 Realizar pagamento")
+        print("4 Cancelar titulo")
         print("9 Retornar")
         opcao = int(input("Informe a opcao desejada: "))
         match opcao:
@@ -43,6 +44,8 @@ class Titulo:
                 Titulo.Show()
             case 3:
                 Titulo.DoPayment()
+            case 4:
+                Titulo.Cancel()
             case 9:
                 pass
     def Add():
@@ -86,10 +89,32 @@ class Titulo:
                 print(f"Descrição: {titulo['desc']}")
                 print(f"Número: {titulo.doc_id}")
                 print(f"Vencimento: {titulo['vencimento']}")
+                print(f"Status: {titulo['status']}")
                 print('-------------------------------------------------')
         else:
             print("Nenhum título encontrado")
         input("Pressione qualquer tecla para continuar")
+
+    def Cancel():
+        db = TinyDB(Titulo.db)
+        titulos = Query()
+        id = int(input("Informe o número do titulo: "))
+        numero_titulo = db.get(doc_id=id)
+        if (numero_titulo is not None):
+            db.update({'status':StatusPgto.cancelado.value},doc_ids=[id])
+            result = db.search(titulos.doc_id == id)
+            for fatura in result:
+                print(f"Valor: R${fatura['valor']}")
+                print(f"Fornecedor: {fatura['fornecedor']}")
+                print(f"Descrição: {fatura['desc']}")
+                print(f"Número: {fatura.doc_id}")
+                print(f"Vencimento: {fatura['vencimento']}")
+                print(f"Status: {fatura['status']}")
+                print('-------------------------------------------------')
+        else:
+            print("Nenhum título encontrado")
+        input("Pressione qualquer tecla para continuar")
+
 
 
 def Verify_Status(vencimento):
